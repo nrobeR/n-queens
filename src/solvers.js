@@ -87,7 +87,6 @@ window.findNQueensSolution = function(n) {
 
       }
 
-        console.log("n" + n + " firstCol: "+ firstCol +" row: " + row + " column: " + col + " " + JSON.stringify(board.rows()));
     }
 
     //check for complete solution (refactor)
@@ -100,7 +99,7 @@ window.findNQueensSolution = function(n) {
   }
   solution = board.rows();
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
+  // console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
 
   return solution;
 };
@@ -119,7 +118,7 @@ window.countNQueensSolutions = function(n) {
 
   var conflict;
 
-  var count = 0;
+  var solutionCount = 0;
 
   //iterate across first row
   for(var firstCol=0; firstCol<test; firstCol++){
@@ -154,6 +153,7 @@ window.countNQueensSolutions = function(n) {
 
     //console.log(JSON.stringify(board.rows()));
     if(total===test){
+    console.log(JSON.stringify(board.rows()));
       //console.log("firstCol: "+ firstCol +" row: " + row + " column: " + col + " " + JSON.stringify(board.rows()));
       solutionCount++;
       //console.log("for n is: " + n + " --> solutionCount: " + solutionCount);
