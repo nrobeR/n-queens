@@ -107,62 +107,51 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = 0;
-
-  var test = n;
-  var board = new Board({n:test}); //fixme
-
-  var solution = board.rows();
-
-  var total = 0;
-
+  var count = 0;
+  var board = new Board({n:n}); //fixme
   var conflict;
 
-  var solutionCount = 0;
-
-  //iterate across first row
-  for(var firstCol=0; firstCol<test; firstCol++){
-
-    board = new Board({n:test});
-    board.togglePiece(0,firstCol);
-
-    //iterate across rows that are left
-    for(var row=1; row<test; row++){
-
-      //iterate across columns in this row
-      for(var col=0; col<test; col++){
-        //put piece on board
-        board.togglePiece(row,col);
-
-        //check for conflicts
+  var count = 0;
+  if(n === 0){
+    return 1;
+  }
+  // var currentRowIndex = 0;
+  var findPossible = function(currentRowIndex){
+    // if(currentRowIndex === n-1){
+    //   for(var i = 0; i<n; i++){
+    //     board.togglePiece(currentRowIndex,i);
+    //     conflict = board.hasAnyColConflicts() || board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts();
+    //     if(!conflict){
+    //       console.log("WOWWWWWWWWWW");
+    //       console.log(JSON.stringify(board.rows()));
+    //       count++;
+    //     }
+    //     board.togglePiece(currentRowIndex,i);
+    //   }
+    // }
+    if(currentRowIndex === n){
+      count++;
+      return;
+    }
+    // while(currentRowIndex < n-1){
+      for(var col = 0; col<n; col++){
+        board.togglePiece(currentRowIndex,col);
+        console.log('row: '+currentRowIndex+' col:'+col);
         conflict = board.hasAnyColConflicts() || board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts();
-
-
-        if(conflict){
-          board.togglePiece(row,col);
+        // console.log(JSON.stringify(board.rows()));
+        // console.log(conflict);
+        if(!conflict){
+          findPossible(currentRowIndex+1);
         }
-        else {col = test+1;} //refactor
-
+        console.log('row: '+currentRowIndex+' col:'+col);
+        board.togglePiece(currentRowIndex,col);
       }
-
-    }
-
-    //check for complete solution (refactor)
-    total = _.flatten(board.rows());
-    total = _.reduce(total, function(total,value){return total + value});
-
-    //console.log(JSON.stringify(board.rows()));
-    if(total===test){
-    console.log(JSON.stringify(board.rows()));
-      //console.log("firstCol: "+ firstCol +" row: " + row + " column: " + col + " " + JSON.stringify(board.rows()));
-      solutionCount++;
-      //console.log("for n is: " + n + " --> solutionCount: " + solutionCount);
-    }
-    board.togglePiece(0,firstCol);
+      currentRowIndex++;
+    // }
   }
 
-  if(n===0 || n===1){solutionCount=1;}
+  // var currentRowIndex = 0;
+  findPossible(0);
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  return count;
 };
