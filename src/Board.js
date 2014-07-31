@@ -139,16 +139,36 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      //construct major diagonal
       var thisMajorD = [];
+      var colIndex = majorDiagonalColumnIndexAtFirstRow;
+      var n = this.get('n')-colIndex;
 
+      //construct major diagonal
+      for(var i=0; i<n; i++){
+        thisMajorD.push(this.get(i)[colIndex]);
+        colIndex++;
+      }
 
-      return false; // fixme
+      var total= _.reduce(thisMajorD, function(total,item){
+        return total+item;})
+
+      return total >1;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      var n = this.get('n');
+
+      //iterate over every row
+      for(var i=0; i<n; i++){
+        //iterate over every column
+        for(var j=0; j<n; j++){
+          conflict = conflict || this.hasMajorDiagonalConflictAt(j);
+        }
+      }
+
+      return conflict; // fixme
     },
 
 
@@ -158,12 +178,37 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var thisMinorD = [];
+      var colIndex = minorDiagonalColumnIndexAtFirstRow;
+      var n = colIndex+1;
+
+      //construct minor diagonal
+      for(var i=0; i<n; i++){
+        thisMinorD.push(this.get(i)[colIndex]);
+        colIndex--;
+      }
+
+      var total= _.reduce(thisMinorD, function(total,item){
+        return total+item;})
+
+      return total >1;
+
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      var n = this.get('n');
+
+      //iterate over every row
+      for(var i=0; i<n; i++){
+        //iterate over every column
+        for(var j=0; j<n; j++){
+          conflict = conflict || this.hasMinorDiagonalConflictAt(2);
+        }
+      }
+
+      return conflict; // fixme
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
