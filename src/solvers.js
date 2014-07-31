@@ -50,7 +50,7 @@ window.countNRooksSolutions = function(n) {
 //CHANGE 4 TO NUM!!
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var test = 4;
+  var test = n;
   var board = new Board({n:test}); //fixme
 
   var solution = board.rows();
@@ -59,9 +59,12 @@ window.findNQueensSolution = function(n) {
 
   var conflict;
 
+  var count = 0;
+
   //iterate across first row
   for(var firstCol=0; firstCol<test; firstCol++){
 
+    board = new Board({n:test});
     board.togglePiece(0,firstCol);
 
     //iterate across rows that are left
@@ -82,9 +85,9 @@ window.findNQueensSolution = function(n) {
         }
         else {col = test+1;} //refactor
 
-        console.log(JSON.stringify(board.rows()));
       }
 
+        console.log("n" + n + " firstCol: "+ firstCol +" row: " + row + " column: " + col + " " + JSON.stringify(board.rows()));
     }
 
     //check for complete solution (refactor)
@@ -95,10 +98,9 @@ window.findNQueensSolution = function(n) {
     if(total===test){break;}
     board.togglePiece(0,firstCol);
   }
+  solution = board.rows();
 
-  if(total < test) {solution = null;}
-
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
 
   return solution;
 };
@@ -106,7 +108,60 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0;
+
+  var test = n;
+  var board = new Board({n:test}); //fixme
+
+  var solution = board.rows();
+
+  var total = 0;
+
+  var conflict;
+
+  var count = 0;
+
+  //iterate across first row
+  for(var firstCol=0; firstCol<test; firstCol++){
+
+    board = new Board({n:test});
+    board.togglePiece(0,firstCol);
+
+    //iterate across rows that are left
+    for(var row=1; row<test; row++){
+
+      //iterate across columns in this row
+      for(var col=0; col<test; col++){
+        //put piece on board
+        board.togglePiece(row,col);
+
+        //check for conflicts
+        conflict = board.hasAnyColConflicts() || board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts();
+
+
+        if(conflict){
+          board.togglePiece(row,col);
+        }
+        else {col = test+1;} //refactor
+
+      }
+
+    }
+
+    //check for complete solution (refactor)
+    total = _.flatten(board.rows());
+    total = _.reduce(total, function(total,value){return total + value});
+
+    //console.log(JSON.stringify(board.rows()));
+    if(total===test){
+      //console.log("firstCol: "+ firstCol +" row: " + row + " column: " + col + " " + JSON.stringify(board.rows()));
+      solutionCount++;
+      //console.log("for n is: " + n + " --> solutionCount: " + solutionCount);
+    }
+    board.togglePiece(0,firstCol);
+  }
+
+  if(n===0 || n===1){solutionCount=1;}
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;

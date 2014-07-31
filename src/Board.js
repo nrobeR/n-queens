@@ -178,37 +178,71 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var thisMinorD = [];
-      var colIndex = minorDiagonalColumnIndexAtFirstRow;
-      var n = colIndex+1;
+      // var thisMinorD = [];
+      // var colIndex = minorDiagonalColumnIndexAtFirstRow;
+      // var n = colIndex+1;
 
-      //construct minor diagonal
-      for(var i=0; i<n; i++){
-        thisMinorD.push(this.get(i)[colIndex]);
-        colIndex--;
+      // //construct minor diagonal
+      // for(var i=0; i<n; i++){
+      //   thisMinorD.push(this.get(i)[colIndex]);
+      //   colIndex--;
+      // }
+
+      // var total= _.reduce(thisMinorD, function(total,item){
+      //   return total+item;});
+
+      // return total >1;
+      var row = 0;
+      var col = minorDiagonalColumnIndexAtFirstRow;
+      var matrix = this.rows();
+      var n = matrix.length;
+      var count = 0;
+      while(!this._isInBounds(row,col)){
+        row++;
+        col--;
       }
-
-      var total= _.reduce(thisMinorD, function(total,item){
-        return total+item;})
-
-      return total >1;
+      for(var i = row; i < n; i++){
+        // if(this._isInBounds(row,col)){
+          // while(this._isInBounds(row,col)){
+            console.log("row: " + i + "col: " + col + " value: " + matrix[row][col] + "count: "+ count);
+            if(matrix[i][col]){
+              count++;
+              console.log(n);
+            }
+            col--;
+          // }
+        // }
+      }
+      if(count > 1){
+        return true;
+      }else{
+        return false;
+      }
 
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      // var conflict = false;
+      // var n = this.get('n');
+
+      // //iterate over every row
+      // for(var i=0; i<n; i++){
+      //   //iterate over every column
+      //   for(var j=0; j<n; j++){
+      //     conflict = conflict || this.hasMinorDiagonalConflictAt(j);
+      //   }
+      // }
+
+      // return conflict; // fixme
       var conflict = false;
-      var n = this.get('n');
+      var matrix = this.rows();
+      var n = matrix.length;
 
-      //iterate over every row
-      for(var i=0; i<n; i++){
-        //iterate over every column
-        for(var j=0; j<n; j++){
-          conflict = conflict || this.hasMinorDiagonalConflictAt(j);
-        }
+      for(var i = 0; i < n*2-1; i++){
+        conflict = conflict || this.hasMinorDiagonalConflictAt(i);
       }
-
-      return conflict; // fixme
+      return conflict;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
